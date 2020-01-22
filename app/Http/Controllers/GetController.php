@@ -12,20 +12,11 @@ class GetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($limit = 10, $offset = 0)
+    public function getProject($id)
     {
-        $data["count"] = Get::count();
-        $get = array();
-        foreach (Get::take($limit)->skip($offset)->get() as $p) {
-            $item = [
-                "budget"            => $p->budget,
-                "projectname"       => $p->projectname,
-            ];
-    
-            array_push($get, $item);
-        }
+        $project = Get::where('id', $id)->first();
 
-        $data["get"] = $get;
+        $data["project"] = $project;
         $data["status"] = 1;
         return response($data);
     }
