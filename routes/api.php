@@ -19,4 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/get/{id}', 'GetController@getProject');
 Route::get('/getAll', 'GetController@getAll');
-Route::post('/req/{id}', 'ReqController@index');
+Route::post('/reqproject/{id}', 'ReqController@index');
+Route::post('/reqjasa/{id}', 'ReqController@store');

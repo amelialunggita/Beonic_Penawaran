@@ -23,34 +23,43 @@ class ReqController extends Controller
 
         $project        = Project::where('id', $id)->first();
         $user           = User::where('id', $project->id)->first(); 
+        $labelrelations = Labelrelations::where('id', $id)->first();
+
+        $offers         = new Offers();
+        $offers->type   = "project";
+
+        $offers->relid          = $project->id;
+        $offers->subject        = $project->projectname;
+        $offers->from           = 1; //$user->id; //yang login gan
+        $offers->to             = $project->userid;
+        $offers->bidvalue       = $request->bidvalue;
+        $offers->description    = $request->description;
+
+        $offers->save();
+        return response()->json([
+        $offers,
+        'status'  => '1',
+      ]);
+    }
+
+    public function store(Request $request, $id)
+    {
+        $offers = array();
+
+        $user           = User::where('id', $project->id)->first(); 
         $service        = Services::where('id', $id)->first();
         $labelrelations = Labelrelations::where('id', $id)->first();
 
         $offers         = new Offers();
-        $offers->type   = $labelrelations->type;
+        $offers->type   = "service";
 
-        if($labelrelations->type == 'project') {
-            $offers->relid          = $project->id;
-            $offers->subject        = $project->projectname;
-            $offers->from           = $user->id;
-            $offers->to             = $project->userid;
-            $offers->bidvalue       = $request->bidvalue;
-            $offers->description    = $request->description;
-        }
-        else if($labelrelations->type == 'service') {
-            $offers->from           = $user->id;
-            $offers->to             = $service->userid;
-            $offers->subject        = $service->name;
-            $offers->bidvalue       = $request->minimumprice;
-            $offers->description    = $request->description;
-        }
-        else {
-            return response()->json([
-                'status' => '0',
-                'message' => 'Type tidak termasuk'
-            ]);
-        }
-
+        $offers->relid          = $service->id;
+        $offers->subject        = $request->subject;
+        $offers->from           = 1; //user->id; //yang login gan
+        $offers->to             = $service->userid;
+        $offers->bidvalue       = $service->minimumprice;
+        $offers->description    = $request->descriptions;
+        
         $offers->save();
         return response()->json([
         $offers,
@@ -142,3 +151,23 @@ class ReqController extends Controller
         //
     }
 }
+
+
+
+        
+        // $offers->type   = $labelrelations->service;
+
+        // if($labelrelations->type == 'service') {
+        //     $offers->relid          = $service->id;
+        //     $offers->subject        = $request->subject;
+        //     $offers->from           = $service->id;
+        //     $offers->to             = $service->userid;
+        //     $offers->bidvalue       = $service->minimumprice;
+        //     $offers->description    = $request->descriptions;
+        // }
+        // else {
+        //     return response()->json([
+        //         'status' => '0',
+        //         'message' => 'Type tidak termasuk'
+        //     ]);
+        // }
